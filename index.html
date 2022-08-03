@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lamborgini game</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="script.js"></script> -->
+</head>
+
+<body>
+    <div class="gameContainer">
+        <h1 id="header">Welcome to the game - created by Shubham</h1>
+        <!-- <div class="intro"> welocome to my new game--- Shubham Sharma</div> -->
+        <div><button id="jump" class="btn"> Jump</button></div>
+        <div><button class="right" id="moveright">right</button>
+        </div>
+        <div><button class="left" id="leftBtn"> left</button></div>
+        <div class="gameOver">Game Over(reload to restart)
+        </div>
+        <div id="jee" class="dino"></div>
+        <div id="scoreCont">Your Score</div>
+        <div id="nit" class="obstacle obstacleAni"></div>
+    </div>
+
+
+
+    <script>
+        audio = new Audio('rasputin.mp3');
+        audiogo = new Audio('game.mp3');
+        audio.play();
+        // setTimeout(() =>{
+        //     audio.play()
+        // },1000)
+        score = document.getElementById('scoreCont')
+        score = 0;
+        let jumpBtn = document.querySelector('.btn');
+        jumpBtn.addEventListener('click', Motion);
+        function Motion() {
+            const dino = document.querySelector('.dino')
+            dino.classList.add("animateDino");
+            setTimeout(() =>
+                dino.classList.remove('animateDino'), 1200);
+            // audio.play();
+        }
+        let rightBtn = document.querySelector('.right');
+        rightBtn.addEventListener('click', moveRight);
+        function moveRight() {
+            const dino = document.querySelector('.dino')
+            dinoX = parseInt(window.getComputedStyle(dino, null).getPropertyValue('left'));
+            dino.style.left = dinoX + 40 + "px";
+            // setTimeout(() =>
+            //     dino.classList.remove('animateDino'), 1200);
+        }
+
+        let leftBtn = document.querySelector('.left');
+        leftBtn.addEventListener('click', moveLeft);
+        function moveLeft() {
+            const dino = document.querySelector('.dino')
+            dinoK = parseInt(window.getComputedStyle(dino, null).getPropertyValue('left'));
+            dino.style.left = (dinoK - 40) + "px";
+            // setTimeout(() =>
+            //     dino.classList.remove('animateDino'), 1200);
+
+        }
+
+        score = 0;
+        cross = true;
+        setInterval(() => {
+            dino = document.querySelector('.dino'),
+                gameOver = document.querySelector('.gameOver'),
+                obstacle = document.querySelector('.obstacle'),
+
+                dx = parseInt(window.getComputedStyle(dino, null).getPropertyValue('left'));
+            dy = parseInt(window.getComputedStyle(dino, null).getPropertyValue('top'));
+
+            ox = parseInt(window.getComputedStyle(obstacle, null).getPropertyValue('left'));
+            oy = parseInt(window.getComputedStyle(obstacle, null).getPropertyValue('top'));
+            let X = Math.abs(dx - ox);
+            let Y = Math.abs(dy - oy);
+            if (X < 50 && Y < 50) {
+                obstacle.classList.remove('obstacleAni');
+                obstacle.style.visibility = 'hidden';
+                dino.style.left = '60px';
+                // alert('gameover');
+                gameOver.style.visibility = 'visible';
+                audiogo.play();
+                audio.pause();
+                alert('gameover');
+            }
+            else if (X < 80 && cross) {
+                score += 100;
+                updateScore(score);
+                cross = false;
+                setTimeout(() => {
+                    cross = true;
+                }, 1000)
+                setTimeout(() => {
+                    aniDur = parseFloat(window.getComputedStyle(obstacle, null).getPropertyValue('animation-duration'));
+                    newDur = aniDur - 0.08;
+                    obstacle.style.animationDuration = newDur + 's';
+                },500
+
+                )
+
+            }
+
+        }, 100);
+
+        function updateScore(score) {
+            let yourScore = document.getElementById('scoreCont');
+            yourScore.innerHTML = "Your score:" + score;
+        }
+
+
+    </script>
+</body>
+
+</html>
